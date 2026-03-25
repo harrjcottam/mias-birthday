@@ -920,6 +920,11 @@
           requestAnimationFrame(animate);
         } else {
           isAnimating = false;
+          // Flatten 3D so clicks work inside the card
+          wrapper.style.transformStyle = 'flat';
+          wrapper.style.transform = 'none';
+          cardFront.style.display = 'none';
+          document.getElementById('cardInside').style.transform = 'none';
           backBtn.classList.add('visible');
           revealMessage();
           setTimeout(launchConfetti, 300);
@@ -934,6 +939,12 @@
       isAnimating = true;
       isOpen = false;
       backBtn.classList.remove('visible');
+
+      // Restore 3D for flip animation
+      wrapper.style.transformStyle = 'preserve-3d';
+      wrapper.style.transform = 'rotateY(180deg)';
+      cardFront.style.display = '';
+      document.getElementById('cardInside').style.transform = 'rotateY(180deg)';
 
       // Reset text visibility
       hideMessage();
