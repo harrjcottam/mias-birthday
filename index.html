@@ -920,15 +920,17 @@
           requestAnimationFrame(animate);
         } else {
           isAnimating = false;
-          // Flatten 3D so clicks work inside the card
-          wrapper.style.transformStyle = 'flat';
-          wrapper.style.transform = 'none';
-          cardFront.style.display = 'none';
-          document.getElementById('cardInside').style.transform = 'none';
           backBtn.classList.add('visible');
           revealMessage();
           setTimeout(launchConfetti, 300);
           setTimeout(launchConfetti, 900);
+          // Flatten 3D after a tick so clicks work inside the card
+          requestAnimationFrame(function() {
+            wrapper.style.transformStyle = 'flat';
+            wrapper.style.transform = 'none';
+            cardFront.style.display = 'none';
+            document.getElementById('cardInside').style.transform = 'none';
+          });
         }
       }
       requestAnimationFrame(animate);
