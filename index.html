@@ -511,99 +511,97 @@
       transform: scale(1.05);
     }
 
-    /* ─── Fullscreen Slideshow ─── */
-    #slideshow {
-      position: fixed;
+    /* ─── In-Card Photo Viewer ─── */
+    .card-photos {
+      position: absolute;
       inset: 0;
-      z-index: 200;
       background: #000;
+      border-radius: 12px;
+      z-index: 5;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+      overflow: hidden;
     }
 
-    #slideshow.active {
+    .card-photos.active {
       opacity: 1;
       visibility: visible;
     }
 
-    .slideshow-media {
+    .card-photo {
       position: absolute;
       inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       opacity: 0;
       transition: opacity 0.5s ease;
     }
 
-    .slideshow-media.active {
+    .card-photo.active {
       opacity: 1;
     }
 
-    .slideshow-media img,
-    .slideshow-media video {
-      max-width: 100%;
-      max-height: 100%;
+    .card-photo img,
+    .card-photo video {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
+      border-radius: 12px;
     }
 
-    .slideshow-counter {
-      position: fixed;
-      bottom: 30px;
+    .photo-counter {
+      position: absolute;
+      bottom: 16px;
       left: 50%;
       transform: translateX(-50%);
       font-family: 'Lora', serif;
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.5);
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
       letter-spacing: 2px;
-      z-index: 201;
+      z-index: 6;
       pointer-events: none;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
     }
 
-    .slideshow-hint {
-      position: fixed;
-      bottom: 55px;
+    .photo-hint {
+      position: absolute;
+      bottom: 38px;
       left: 50%;
       transform: translateX(-50%);
       font-family: 'Lora', serif;
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.35);
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.45);
       letter-spacing: 3px;
       text-transform: uppercase;
-      z-index: 201;
+      z-index: 6;
       pointer-events: none;
       animation: gentlePulse 2.5s ease-in-out infinite;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+      white-space: nowrap;
     }
 
-    .slideshow-close {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 36px;
-      height: 36px;
+    .photo-back {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
       border: 1px solid rgba(255,255,255,0.2);
-      color: rgba(255,255,255,0.6);
-      font-size: 18px;
+      color: rgba(255,255,255,0.8);
+      font-size: 16px;
       cursor: pointer;
-      z-index: 202;
+      z-index: 6;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
     }
 
-    .slideshow-close:hover {
-      background: rgba(255,255,255,0.2);
+    .photo-back:hover {
+      background: rgba(0,0,0,0.6);
       color: white;
     }
 
@@ -716,6 +714,27 @@
 
       <!-- INSIDE -->
       <div class="card-inside" id="cardInside">
+        <!-- Photo viewer (fills the card) -->
+        <div class="card-photos" id="cardPhotos">
+          <div class="card-photo active"><img src="assets/100_0100.JPG" alt="memory"></div>
+          <div class="card-photo"><img src="assets/100_0446.JPG" alt="memory"></div>
+          <div class="card-photo"><img src="assets/IMG_0011.JPG" alt="memory"></div>
+          <div class="card-photo"><img src="assets/IMG_0028.JPG" alt="memory"></div>
+          <div class="card-photo"><img src="assets/IMG_0034.jpg" alt="memory"></div>
+          <div class="card-photo"><img src="assets/IMG_0099.jpg" alt="memory"></div>
+          <div class="card-photo"><video src="assets/IMG_0099.mov" muted playsinline loop></video></div>
+          <div class="card-photo"><img src="assets/IMG_0884.JPG" alt="memory"></div>
+          <div class="card-photo"><img src="assets/IMG_1270.JPG" alt="memory"></div>
+          <div class="card-photo"><img src="assets/IMG_8897.jpg" alt="memory"></div>
+          <div class="card-photo"><img src="assets/IMG_8913.jpg" alt="memory"></div>
+          <div class="card-photo"><img src="assets/IMG_9402.JPG" alt="memory"></div>
+          <div class="card-photo"><img src="assets/IMG_9595.jpg" alt="memory"></div>
+          <div class="card-photo"><img src="assets/IMG_9653.jpg" alt="memory"></div>
+          <button class="photo-back" onclick="event.stopPropagation(); closePhotos()">&#10005;</button>
+          <div class="photo-hint">tap for next</div>
+          <div class="photo-counter" id="photoCounter">1 / 14</div>
+        </div>
+
         <div class="inside-content" id="insideContent">
           <div class="inside-greeting" id="greeting">Dear Mia,</div>
 
@@ -756,26 +775,6 @@
 
   <button class="back-btn" id="backBtn" onclick="closeCard()">Close card</button>
 
-  <!-- Fullscreen Slideshow -->
-  <div id="slideshow">
-    <div class="slideshow-media active"><img src="assets/100_0100.JPG" alt="memory"></div>
-    <div class="slideshow-media"><img src="assets/100_0446.JPG" alt="memory"></div>
-    <div class="slideshow-media"><img src="assets/IMG_0011.JPG" alt="memory"></div>
-    <div class="slideshow-media"><img src="assets/IMG_0028.JPG" alt="memory"></div>
-    <div class="slideshow-media"><img src="assets/IMG_0034.jpg" alt="memory"></div>
-    <div class="slideshow-media"><img src="assets/IMG_0099.jpg" alt="memory"></div>
-    <div class="slideshow-media"><video src="assets/IMG_0099.mov" muted playsinline loop></video></div>
-    <div class="slideshow-media"><img src="assets/IMG_0884.JPG" alt="memory"></div>
-    <div class="slideshow-media"><img src="assets/IMG_1270.JPG" alt="memory"></div>
-    <div class="slideshow-media"><img src="assets/IMG_8897.jpg" alt="memory"></div>
-    <div class="slideshow-media"><img src="assets/IMG_8913.jpg" alt="memory"></div>
-    <div class="slideshow-media"><img src="assets/IMG_9402.JPG" alt="memory"></div>
-    <div class="slideshow-media"><img src="assets/IMG_9595.jpg" alt="memory"></div>
-    <div class="slideshow-media"><img src="assets/IMG_9653.jpg" alt="memory"></div>
-    <button class="slideshow-close" onclick="closeSlideshow()">&#10005;</button>
-    <div class="slideshow-hint">tap for next</div>
-    <div class="slideshow-counter" id="slideshowCounter">1 / 14</div>
-  </div>
 
   <script>
     // ─── State ───
@@ -1016,57 +1015,57 @@
       wrapper.style.transform = 'rotateY(0deg) rotateX(0deg)';
     });
 
-    // ─── Fullscreen Slideshow ───
-    let currentSlide = 0;
-    const slideshowEl = document.getElementById('slideshow');
-    const ssSlides = document.querySelectorAll('.slideshow-media');
-    const totalSlides = ssSlides.length;
-    const ssCounter = document.getElementById('slideshowCounter');
+    // ─── In-Card Photo Viewer ───
+    let currentPhoto = 0;
+    const cardPhotos = document.getElementById('cardPhotos');
+    const photos = document.querySelectorAll('.card-photo');
+    const totalPhotos = photos.length;
+    const photoCounter = document.getElementById('photoCounter');
+
+    const insideContent = document.getElementById('insideContent');
 
     function openSlideshow() {
-      currentSlide = 0;
-      ssSlides.forEach((s, i) => s.classList.toggle('active', i === 0));
-      ssCounter.textContent = '1 / ' + totalSlides;
-      slideshowEl.classList.add('active');
+      currentPhoto = 0;
+      photos.forEach((p, i) => p.classList.toggle('active', i === 0));
+      photoCounter.textContent = '1 / ' + totalPhotos;
+      cardPhotos.classList.add('active');
+      insideContent.style.pointerEvents = 'none';
 
-      // Play video if first slide is video
-      const vid = ssSlides[0].querySelector('video');
+      const vid = photos[0].querySelector('video');
       if (vid) { vid.currentTime = 0; vid.play(); }
     }
 
-    function closeSlideshow() {
-      // Pause any video
-      const vid = ssSlides[currentSlide].querySelector('video');
+    function closePhotos() {
+      const vid = photos[currentPhoto].querySelector('video');
       if (vid) vid.pause();
-      slideshowEl.classList.remove('active');
+      cardPhotos.classList.remove('active');
+      insideContent.style.pointerEvents = '';
     }
 
-    function nextSlide() {
-      // Pause current video if any
-      const oldVid = ssSlides[currentSlide].querySelector('video');
+    function nextPhoto() {
+      const oldVid = photos[currentPhoto].querySelector('video');
       if (oldVid) oldVid.pause();
 
-      ssSlides[currentSlide].classList.remove('active');
+      photos[currentPhoto].classList.remove('active');
 
-      currentSlide++;
-      if (currentSlide >= totalSlides) {
-        // End of slideshow — close it
-        closeSlideshow();
+      currentPhoto++;
+      if (currentPhoto >= totalPhotos) {
+        currentPhoto = 0;
+        closePhotos();
         return;
       }
 
-      ssSlides[currentSlide].classList.add('active');
-      ssCounter.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+      photos[currentPhoto].classList.add('active');
+      photoCounter.textContent = (currentPhoto + 1) + ' / ' + totalPhotos;
 
-      // Auto-play video
-      const newVid = ssSlides[currentSlide].querySelector('video');
+      const newVid = photos[currentPhoto].querySelector('video');
       if (newVid) { newVid.currentTime = 0; newVid.play(); }
     }
 
-    // Tap anywhere on slideshow to go next (except close button)
-    slideshowEl.addEventListener('click', (e) => {
-      if (e.target.closest('.slideshow-close')) return;
-      nextSlide();
+    // Tap on photo area to advance
+    cardPhotos.addEventListener('click', (e) => {
+      if (e.target.closest('.photo-back')) return;
+      nextPhoto();
     });
   </script>
 </body>
